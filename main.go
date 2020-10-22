@@ -29,7 +29,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	b.Handle("ping", func(m *tb.Message) {
+	b.Handle("/ping", func(m *tb.Message) {
 		b.Send(m.Sender, "pong")
 	})
 }
