@@ -7,11 +7,10 @@ import (
 	"github.com/serbi/calendar_events_bot/routes"
 )
 
-var port = os.Getenv("PORT")
-var webhookAddr = ":" + port + "/webhook"
-
 func main() {
-	err := http.ListenAndServe(webhookAddr, http.HandlerFunc(routes.WebhookHandler))
+	var port = os.Getenv("PORT")
+
+	err := http.ListenAndServe(":"+port+"/webhook", http.HandlerFunc(routes.WebhookHandler))
 	if err != nil {
 		panic(err)
 	}
