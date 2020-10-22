@@ -1,35 +1,74 @@
-package calendar_events_bot
+package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"os"
 
-	tb "gopkg.in/tucnak/telebot.v2"
+	"github.com/gin-gonic/gin"
+	_ "github.com/heroku/x/hmetrics/onload"
+	_ "github.com/lib/pq"
+	tgbotapi "gopkg.in/telegram-bot-api.v4"
 )
 
-func main() {
-	var (
-		port      = os.Getenv("PORT")
-		publicURL = os.Getenv("PUBLIC_URL")
-		token     = os.Getenv("TOKEN")
-	)
+var (
+	bot      *tgbotapi.BotAPI
+	port     = os.Getenv("PORT")
+	botToken = os.Getenv("TOKEN")
+	baseURL  = os.Getenv("PUBLIC_URL")
+)
 
-	webhook := &tb.Webhook{
-		Listen:   ":" + port,
-		Endpoint: &tb.WebhookEndpoint{PublicURL: publicURL},
-	}
+func initTelegram() {
+	var err error
 
-	pref := tb.Settings{
-		Token:  token,
-		Poller: webhook,
-	}
-
-	b, err := tb.NewBot(pref)
+	bot, err = tgbotapi.NewBotAPI(botToken)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return
 	}
 
-	b.Handle("/ping", func(m *tb.Message) {
-		b.Send(m.Sender, "pong")
-	})
+	// this perhaps should be conditional on GetWebhookInfo()
+	// only set webhook if it is not set properly
+	url := baseURL + bot.Token
+	_, err = bot.SetWebhook(tgbotapi.NewWebhook(url))
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func webhookHandler(c *gin.Context) {
+	defer c.Request.Body.Close()
+
+	bytes, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	var update tgbotapi.Update
+	err = json.Unmarshal(bytes, &update)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Printf("From: %+v Text: %+v\n", update.Message.From, update.Message.Text)
+}
+
+func main() {
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
+
+	router := gin.New()
+	router.Use(gin.Logger())
+
+	initTelegram()
+	router.POST("/"+bot.Token, webhookHandler)
+
+	err := router.Run(":" + port)
+	if err != nil {
+		log.Println(err)
+	}
 }
