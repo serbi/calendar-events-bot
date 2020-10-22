@@ -1,1 +1,1 @@
-# calendar-events-bot
+# calendar_events_bot
