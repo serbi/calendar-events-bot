@@ -90,5 +90,8 @@ func sayPolo(chatID int64) error {
 
 // Finally, the main funtion starts our server on port 3000
 func main() {
-	http.ListenAndServe("\":\" + port/webhook", http.HandlerFunc(Handler))
+	err := http.ListenAndServe(":"+port, http.HandlerFunc(Handler))
+	if err != nil {
+		panic(err)
+	}
 }
