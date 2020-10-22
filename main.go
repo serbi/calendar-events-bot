@@ -9,5 +9,9 @@ import (
 
 func main() {
 	var port = os.Getenv("PORT")
-	http.ListenAndServe(":"+port, http.HandlerFunc(routes.WebhookHandler))
+
+	err := http.ListenAndServe(":"+port, http.HandlerFunc(routes.WebhookHandler))
+	if err != nil {
+		panic(err)
+	}
 }
