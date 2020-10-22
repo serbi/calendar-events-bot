@@ -1,4 +1,4 @@
-package calendar_events_bot
+package main
 
 import (
 	"bytes"
