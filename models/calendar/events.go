@@ -85,6 +85,10 @@ func RequestCalendarEvents(calendarRequest *Request) (events *Events) {
 
 func GenerateTextResponse(events *Events, inputDate string) (textResponse string) {
 	for _, item := range events.Items {
+		if len(item.Summary) == 0 {
+			continue
+		}
+
 		var (
 			startTime time.Time
 			endTime   time.Time
@@ -106,7 +110,7 @@ func GenerateTextResponse(events *Events, inputDate string) (textResponse string
 		durationParsed := fmt.Sprintf("%dh", int(durationTime.Hours()))
 
 		textResponse += fmt.Sprintf(
-			"\n\n\t\t<b>\"%s\" od %s do %s</b> (%s) <a href=\"%s\">\n\t\tSprawdź w kalendarzu</a>",
+			"\n\n\t\t<pre><b>\"%s\" od %s do %s</b> (%s)</pre> <a href=\"%s\">\n\t\tSprawdź w kalendarzu</a>",
 			item.Summary,
 			startTimeParsed,
 			endTimeParsed,
@@ -117,11 +121,11 @@ func GenerateTextResponse(events *Events, inputDate string) (textResponse string
 
 	if len(textResponse) > 0 {
 		textPrefix := fmt.Sprintf(
-			"<b>Wyniki wyszukiwania dla kalendarza \"%s\" na dzień %s</b>",
+			"<b>Wyniki wyszukiwania dla kalendarza \"%s\" na dzień %s</b>\n(Kliknij aby skopiować)",
 			events.Summary,
 			inputDate,
 		)
-		textResponse = textPrefix + textResponse
+		textResponse = textPrefix + textResponse + "\n\n"
 	} else {
 		textResponse = fmt.Sprintf(
 			"<b>Brak wolnych terminów w kalendarzu \"%s\" na dzień %s</b>",
