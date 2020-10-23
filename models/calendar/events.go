@@ -110,7 +110,7 @@ func GenerateTextResponse(events *Events, inputDate string) (textResponse string
 		durationParsed := fmt.Sprintf("%dh", int(durationTime.Hours()))
 
 		textResponse += fmt.Sprintf(
-			"\n\n\t\t<pre><b>\"%s\" od %s do %s</b> (%s)</pre> <a href=\"%s\">\n\t\tSprawdź w kalendarzu</a>",
+			"\n\n\t\t<pre><b>\"%s\"\t\tOd %s do %s</b> (%s)</pre> <a href=\"%s\">\n\t\tSprawdź w kalendarzu</a>",
 			item.Summary,
 			startTimeParsed,
 			endTimeParsed,
@@ -121,7 +121,7 @@ func GenerateTextResponse(events *Events, inputDate string) (textResponse string
 
 	if len(textResponse) > 0 {
 		textPrefix := fmt.Sprintf(
-			"<b>Wyniki wyszukiwania dla kalendarza \"%s\" na dzień %s</b>\n(Kliknij aby skopiować)",
+			"<b>Wyniki wyszukiwania dla kalendarza \"%s\" na dzień %s</b>\n(Kliknij datę aby skopiować)",
 			events.Summary,
 			inputDate,
 		)
