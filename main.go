@@ -1,17 +1,18 @@
 package main
 
 import (
+	"log"
 	"net/http"
-	"os"
 
 	"github.com/serbi/calendar_events_bot/routes"
 )
 
 func main() {
-	var port = os.Getenv("PORT")
+	//var port = os.Getenv("PORT")
+	var addr = "localhost:" + "3000"
 
-	err := http.ListenAndServe(":"+port, http.HandlerFunc(routes.WebhookHandler))
-	if err != nil {
-		panic(err)
-	}
+	http.HandleFunc("/webhook", routes.WebhookHandler)
+
+	log.Printf("Listening on %s ...", addr)
+	log.Fatal(http.ListenAndServe(addr, nil))
 }
