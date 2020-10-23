@@ -107,7 +107,7 @@ func GenerateTextResponse(events *Events, inputDate string) (textResponse string
 		endTimeParsed := endTime.Format("15:04")
 
 		year, month, _ := startTime.Date()
-		startDateParsed := fmt.Sprintf("%s/%d", month, year)
+		startDateParsed := fmt.Sprintf("%s-%s", month, string(year))
 
 		durationTime := endTime.Sub(startTime)
 		durationParsed := fmt.Sprintf("%dh", int(durationTime.Hours()))
