@@ -16,7 +16,7 @@ func CalendarEventsAction(message string) (response string) {
 		return
 	}
 
-	timeMin, err := time.Parse("02-01-2006", dateInput)
+	timeMin, err := time.Parse("2-01-2006", dateInput)
 	if err != nil {
 		log.Printf("error while parsing timeMin value: %s", err)
 		return
