@@ -106,16 +106,13 @@ func GenerateTextResponse(events *Events, inputDate string) (textResponse string
 		startTimeParsed := startTime.Format("15:04")
 		endTimeParsed := endTime.Format("15:04")
 
-		year, month, _ := startTime.Date()
-		startDateParsed := fmt.Sprintf("%s-%s", month, string(year))
-
 		durationTime := endTime.Sub(startTime)
 		durationParsed := fmt.Sprintf("%dh", int(durationTime.Hours()))
 
 		textResponse += fmt.Sprintf(
 			"\n\n\t\t<b>\"%s\"</b>\t\t%s od %s do %s</b> (%s)</pre>\n\t\t<a href=\"%s\">Sprawdź w kalendarzu</a>",
 			item.Summary,
-			startDateParsed,
+			inputDate[4:],
 			startTimeParsed,
 			endTimeParsed,
 			durationParsed,
