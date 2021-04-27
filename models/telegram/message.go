@@ -46,7 +46,7 @@ func SendMessage(message *Message) (err error) {
 		return
 	}
 
-	log.Printf("message sent successfully")
+	log.Printf("message \"%s\" sent successfully to chat ID: %d\n", message.Text, message.Chat.Id)
 
 	return
 }
